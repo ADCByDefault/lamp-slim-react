@@ -12,23 +12,23 @@ class AlunniController{
         $sql = "SELECT * FROM alunni";
         $result = $conn->query($sql);
 
-        $results = $result->fetch_all();
+        $results = $result->fetch_all(MYSQLI_ASSOC);
 
-        $response->getBody()->write(json_encode(array("5DIA"=>$results)));
+        $response->getBody()->write(json_encode($results, JSON_NUMERIC_CHECK));
         
         return $response->withHeader("Content-Type","application/json");
     }
     public function show(Request $request, Response $response, $args){
-        $cf = $args["cf"];
+        $id = $args["id"];
 
         $conn = new mysqli("my_mariadb","root","ciccio","scuola");
 
-        $sql = "SELECT * FROM alunni WHERE cf = '$cf'";
+        $sql = "SELECT * FROM alunni WHERE id = '$id'";
         $result = $conn->query($sql);
 
-        $results = $result->fetch_all();
+        $results = $result->fetch_all(MYSQLI_ASSOC);
 
-        $response->getBody()->write(json_encode(array("5DIA"=>$results)));
+        $response->getBody()->write(json_encode($results, JSON_NUMERIC_CHECK));
         return $response->withHeader("Content-Type","application/json");
     }
 
@@ -36,14 +36,12 @@ class AlunniController{
         $conn = new mysqli("my_mariadb","root","ciccio","scuola");
         $test = $request->getBody()->getContents();
         $data = json_decode($test, true);
-        //curl -X POST http://localhost:8080/alunni -d '{"cf":"gg","nome":"carlo","cognome":"giannini","eta":39}' -H "Content-Type: application/json"
+        //curl -X POST http://localhost:8080/alunni -d '{"id":"gg","nome":"carlo","cognome":"giannini","eta":39}' -H "Content-Type: application/json"
         
-        $c = $data['cf'];
         $n = $data['nome'];
         $s = $data['cognome'];
-        $e = $data['eta'];
 
-        $sql = "INSERT INTO alunni(cf,nome,cognome,eta) VALUES ('$c','$n','$s','$e')";
+        $sql = "INSERT INTO alunni(nome,cognome) VALUES ('$n','$s')";
         $conn->query($sql);
 
         if($conn->affected_rows > 0){
@@ -67,14 +65,13 @@ class AlunniController{
         $data = json_decode($test, true);
         //curl -X PUT http://localhost:8080/alunni/gg -d '{"nome":"carlo","cognome":"giannini","eta":39}' -H "Content-Type: application/json"
         
-        $c = $args['cf'];
+        $c = $args['id'];
         $n = $data['nome'];
         $s = $data['cognome'];
-        $e = $data['eta'];
 
         $sql = "UPDATE alunni
-                SET nome = '$n', cognome = '$s', eta = '$e'
-                WHERE cf = '$c'";
+                SET nome = '$n', cognome = '$s'
+                WHERE id = '$c'";
         $conn->query($sql);
 
         if($conn->affected_rows > 0){
@@ -88,7 +85,7 @@ class AlunniController{
             "query" => $sql
         ];
 
-        $response->getBody()->write(json_encode($result));
+        $response->getBody()->write(json_encode($result, JSON_NUMERIC_CHECK));
         return $response->withStatus(405)->withHeader("Content-Type","application/json");
     }
 
@@ -97,10 +94,10 @@ class AlunniController{
         $data = json_decode($test, true);
         //curl -X DELETE http://localhost:8080/alunni/gg"
         
-        $c = $args['cf'];
+        $c = $args['id'];
 
         $sql = "DELETE FROM alunni
-                WHERE cf = '$c'";
+                WHERE id = '$c'";
 
         $conn->query($sql);
 
@@ -115,7 +112,7 @@ class AlunniController{
             "query" => $sql
         ];
 
-        $response->getBody()->write(json_encode($result));
+        $response->getBody()->write(json_encode($result, JSON_NUMERIC_CHECK));
         return $response->withStatus(405)->withHeader("Content-Type","application/json");
     }
     

@@ -1,23 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import Alunno from './Alunno'
+import FormDiInserimento from './FormDiInserimento'
+import {useState, useEffect} from 'react'
 
 function App() {
+
+  useEffect(() => {
+    popolaAlunni();
+  },[])
+
+  const [alunni, setAlunni] = useState([]);
+  const [pronto, setpronto] = useState(false);
+  const [mostraForm, setMostraForm] = useState(false);
+
+  async function popolaAlunni(){
+    const response = await fetch("http://localhost:8080/alunni", {method: "GET"});
+    const array = await response.json();
+    setAlunni(array);
+    setpronto(true);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        pronto ?
+          alunni && alunni.map(
+            a => (
+            <Alunno alunno={a} popolaAlunni={popolaAlunni} key={a.id} />
+          ))
+        :
+         <div>Loading...</div>
+      }
+
+      <button onClick={() => setMostraForm(true)}>Inserisci nuovo alunno</button>
+      { mostraForm &&
+        <div>
+          <div><FormDiInserimento popolaAlunni={popolaAlunni}/></div>
+          <button onClick={() => setMostraForm(false)}>Annulla inserimento</button>
+        </div>
+      }
     </div>
   );
 }

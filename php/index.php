@@ -14,8 +14,8 @@ $app = AppFactory::create();
 $app->get('/',"SiteController:index");
 $app->get('/alunni',"AlunniController:index");
 $app->get('/alunni/',"AlunniController:index");
-$app->get('/alunni/{cf}',"AlunniController:show");
-$app->get('/alunni/{cf}/',"AlunniController:show");
+$app->get('/alunni/{id}',"AlunniController:show");
+$app->get('/alunni/{id}/',"AlunniController:show");
 
 //POST
 
@@ -24,12 +24,12 @@ $app->post('/alunni/',"AlunniController:create");
 
 //PUT
 
-$app->put('/alunni/{cf}',"AlunniController:update");
-$app->put('/alunni/{cf}/',"AlunniController:update");
+$app->put('/alunni/{id}',"AlunniController:update");
+$app->put('/alunni/{id}/',"AlunniController:update");
 
 //DELETE
 
-$app->delete('/alunni/{cf}',"AlunniController:delete");
-$app->delete('/alunni/{cf}/',"AlunniController:delete");
+$app->delete('/alunni/{id}',"AlunniController:delete");
+$app->delete('/alunni/{id}/',"AlunniController:delete");
 
 $app->run();
