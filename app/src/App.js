@@ -12,6 +12,7 @@ function App() {
   const [alunni, setAlunni] = useState([]);
   const [pronto, setpronto] = useState(false);
   const [mostraForm, setMostraForm] = useState(false);
+  const [alunno, setAlunno] = useState(null);
 
   async function popolaAlunni(){
     const response = await fetch("http://localhost:8080/alunni", {method: "GET"});
@@ -25,16 +26,16 @@ function App() {
         pronto ?
           alunni && alunni.map(
             a => (
-            <Alunno alunno={a} popolaAlunni={popolaAlunni} key={a.id} />
+            <Alunno alunno={a} popolaAlunni={popolaAlunni} setMostraForm={setMostraForm} setAlunno={setAlunno} key={a.id} />
           ))
         :
          <div>Loading...</div>
       }
 
-      <button onClick={() => setMostraForm(true)}>Inserisci nuovo alunno</button>
+      <button onClick={() => {setMostraForm(true); setAlunno(null)}}>Inserisci nuovo alunno</button>
       { mostraForm &&
         <div>
-          <div><FormDiInserimento popolaAlunni={popolaAlunni}/></div>
+          <div><FormDiInserimento alunno={alunno} popolaAlunni={popolaAlunni}/></div>
           <button onClick={() => setMostraForm(false)}>Annulla inserimento</button>
         </div>
       }

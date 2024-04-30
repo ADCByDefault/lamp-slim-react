@@ -1,7 +1,8 @@
 import {useState} from 'react';
 
-export default function Alunno({alunno, popolaAlunni}){
+export default function Alunno({alunno, popolaAlunni, setAlunno, setMostraForm}){
     const [inCancellazione, setInCancellazione] = useState(false);
+    const [inModifica, setInModifica] = useState(false);
     const [richiestaConferma, setRichiestaConferma] = useState(false);
 
 
@@ -14,6 +15,8 @@ export default function Alunno({alunno, popolaAlunni}){
     function richiesta(){
         setRichiestaConferma(true);
     }
+
+
 
     function annulla(){
         setRichiestaConferma(false);
@@ -32,6 +35,9 @@ export default function Alunno({alunno, popolaAlunni}){
             }
             { inCancellazione &&
                 <span>in fase di cancellazione </span>
+            }
+            {
+                <button onClick={() => {setAlunno(alunno); setMostraForm(true);}}>Modifica</button>
             }
             <hr />
 
